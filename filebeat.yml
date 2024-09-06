@@ -1,0 +1,14 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /usr/share/filebeat/logs/*.log  # This is the path where Filebeat will look for log files
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]  # Elasticsearch URL
+  username: "elastic"
+  password: "changeme"  # Replace with your Elasticsearch password if needed
+
+setup.kibana:
+  host: "http://kibana:5601"  # Kibana URL
+
