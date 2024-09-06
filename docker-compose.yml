@@ -5,7 +5,7 @@ services:
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false  # Disable security for simplicity
+      - xpack.security.enabled=false
     ports:
       - 9200:9200
     volumes:
@@ -28,13 +28,26 @@ services:
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.9.0
     container_name: filebeat
+    command: filebeat -e -strict.perms=false
     volumes:
-      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml  # Mount your filebeat config
-      - ./logs:/usr/share/filebeat/logs  # Mount your logs directory
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./logs:/usr/share/filebeat/logs
     networks:
       - elastic
     depends_on:
       - elasticsearch
+
+  setup_kibana:
+    image: curlimages/curl:latest  # A lightweight curl image to run the setup script
+    container_name: setup_kibana
+    depends_on:
+      - kibana
+    networks:
+      - elastic
+    volumes:
+      - ./setup_kibana.sh:/usr/share/kibana/setup_kibana.sh  # Mount the setup script
+    entrypoint: /bin/sh /usr/share/kibana/setup_kibana.sh  # Use /bin/sh instead of /bin/bash
+    restart: "no"  # Ensure the container stops after the script completes
 
 volumes:
   esdata:
