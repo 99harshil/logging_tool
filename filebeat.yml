@@ -2,7 +2,24 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/share/filebeat/logs/*.log  # This is the path where Filebeat will look for log files
+      - /path/to/processed_logs/*.log # This is the path where Filebeat will look for log files
+    fields:
+      log_file: true
+    multiline:
+      pattern: '^\['
+      negate: true
+      match: after
+
+processors:
+  - add_fields:
+      target: ''
+      fields:
+        log_file: '{{.log.file.path}}'
+  - add_locale: ~
+  - dissect:
+      tokenizer: "%{line_number}: %{message}"
+      field: "message"
+      target_prefix: "dissected"
 
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]  # Elasticsearch URL
