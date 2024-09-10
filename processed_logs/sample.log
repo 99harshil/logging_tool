@@ -1,7 +1,0 @@
-     1	INFO  2024-09-01 12:00:00 Service started successfully
-     2	ERR   2024-09-01 12:05:23 Failed to connect to database
-     3	WARN  2024-09-01 12:10:45 High memory usage detected
-     4	INFO  2024-09-01 12:15:00 New user signed up
-     5	ERR   2024-09-01 12:20:17 Failed to send email notification
-     6	INFO  2024-09-01 12:25:00 Service stopped successfully
-     7	
